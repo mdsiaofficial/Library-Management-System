@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = register;
+exports.login = login;
 const config_1 = require("../config/config");
 const user_dao_1 = __importDefault(require("../daos/user.dao"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -26,13 +27,39 @@ function register(user) {
         }
         try {
             const hashedPassword = yield bcryptjs_1.default.hash(user.password, rounds);
-            const saved = new user_dao_1.default(Object.assign(Object.assign({}, user), { password: hashedPassword }));
-            return yield saved.save();
+            const newUser = new user_dao_1.default(Object.assign(Object.assign({}, user), { password: hashedPassword }));
+            return yield newUser.save();
         }
         catch (error) {
             // throw new Error("unable to create user at this time.")
             // throw new UnableToSaveUserError("unable to create user at this time.")
             throw new library_errors_1.UnableToSaveUserError(error.message);
+        }
+    });
+}
+function login(credentials) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const rounds = config_1.ROUNDS;
+        try {
+            const user = yield user_dao_1.default.findOne({ email: credentials.email });
+            if (!user) {
+                throw new Error("User not exists. Please Register first !!!");
+            }
+            else {
+                console.log(user);
+                const validatePassword = yield bcryptjs_1.default.compare(credentials.password, user.password);
+                if (validatePassword) {
+                    return user;
+                }
+                else {
+                    throw new library_errors_1.InvalidUsernameOrPasswordError("Invalid Password");
+                }
+            }
+        }
+        catch (error) {
+            console.log(error);
+            // throw new Error(error.message)
+            throw new library_errors_1.InvalidUsernameOrPasswordError(error.message);
         }
     });
 }

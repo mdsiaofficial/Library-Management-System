@@ -10,7 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleRegister = handleRegister;
+exports.handleLogin = handleLogin;
 const user_service_1 = require("../services/user.service");
+const library_errors_1 = require("../utils/library.errors");
 function handleRegister(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.body;
@@ -24,7 +26,42 @@ function handleRegister(req, res) {
             });
         }
         catch (error) {
+            if (error.message.includes("E11000 duplicate key error collection:")) {
+                res.status(409).json({ message: "User with email already exists", error: error.message });
+            }
             res.status(500).json({ message: error.message });
+        }
+    });
+}
+function handleLogin(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const credentials = req.body;
+        try {
+            const user = yield (0, user_service_1.login)(credentials);
+            res
+                .status(200)
+                .json({
+                message: "User logged in successfully.",
+                user: {
+                    _id: user._id,
+                    type: user.type,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                }
+            });
+        }
+        catch (error) {
+            if (error instanceof library_errors_1.InvalidUsernameOrPasswordError) {
+                res
+                    .status(401)
+                    .json({ message: "Unable to login user at this time.", error: error.message });
+            }
+            else {
+                res
+                    .status(500)
+                    .json({ message: "Unable to login user at this time", error: error.message });
+            }
         }
     });
 }

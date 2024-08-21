@@ -3,3 +3,9 @@ export class UnableToSaveUserError extends Error {
     super(message);
   }
 }
+
+export class InvalidUsernameOrPasswordError extends Error{
+  constructor(message: string) { 
+    super(message);
+  }
+}
