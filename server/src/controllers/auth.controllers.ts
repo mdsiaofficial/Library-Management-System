@@ -16,7 +16,7 @@ export async function handleRegister(req:Request, res: Response) {
         message: "User successfully created",
         user: registeredUser
     })
-  } catch (error) {
-    res.status(500).json({message:"Unable to register user at this time."})
+  } catch (error:any) {
+    res.status(500).json({message:error.message})
   }
 }
