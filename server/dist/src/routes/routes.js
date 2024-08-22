@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerRoutes = registerRoutes;
 const auth_routes_1 = __importDefault(require("./auth.routes"));
+const user_routes_1 = __importDefault(require("./user.routes"));
 function registerRoutes(app) {
     app.get("/health", (req, res) => {
         res
@@ -12,4 +13,5 @@ function registerRoutes(app) {
             .json({ message: "Server is running..." });
     });
     app.use("/auth", auth_routes_1.default);
+    app.use("/users", user_routes_1.default);
 }

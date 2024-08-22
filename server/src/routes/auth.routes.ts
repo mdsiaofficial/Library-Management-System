@@ -7,4 +7,4 @@ const authRouter = express.Router()
 authRouter.post("/register", validateSchema(Schemas.user.create), handleRegister)
 authRouter.post("/login", validateSchema(Schemas.user.login), handleLogin)
 
-export = authRouter
+export default authRouter

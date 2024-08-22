@@ -14,6 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = register;
 exports.login = login;
+exports.findAllUser = findAllUser;
+exports.findUserById = findUserById;
+exports.modifyUser = modifyUser;
+exports.removeUser = removeUser;
 const config_1 = require("../config/config");
 const user_dao_1 = __importDefault(require("../daos/user.dao"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -60,6 +64,55 @@ function login(credentials) {
             console.log(error);
             // throw new Error(error.message)
             throw new library_errors_1.InvalidUsernameOrPasswordError(error.message);
+        }
+    });
+}
+function findAllUser() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const users = yield user_dao_1.default.find();
+            return users;
+        }
+        catch (error) {
+            return [];
+        }
+    });
+}
+function findUserById(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = yield user_dao_1.default.findById(userId);
+            if (user)
+                return user;
+            throw new Error("User not found with this id.");
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    });
+}
+function modifyUser(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield user_dao_1.default.findByIdAndUpdate(user === null || user === void 0 ? void 0 : user._id, user, { new: true });
+            if (!user) {
+                throw new Error("User not found with this id.");
+            }
+            return user;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    });
+}
+function removeUser(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = yield user_dao_1.default.findByIdAndDelete(userId);
+            return "User deleted successfully";
+        }
+        catch (error) {
+            throw new Error(error.message);
         }
     });
 }
