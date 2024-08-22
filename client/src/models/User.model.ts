@@ -5,3 +5,8 @@ export interface IUser {
   lastName: string;
   email: string;
 }
+
+export interface LoginUserPayload {
+  email: string;
+  password: string;
+}
