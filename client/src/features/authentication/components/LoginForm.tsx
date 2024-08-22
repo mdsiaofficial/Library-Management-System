@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/ReduxStore";
 import { loginUser } from "../../../redux/slices/authentication.slice";
 
-export default function LoginForm(): JSX.Element {
+interface ILoginFormProps{
+  toggleRegister(): void;
+
+}
+export default function LoginForm(props: ILoginFormProps): JSX.Element {
 
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
@@ -48,7 +52,7 @@ export default function LoginForm(): JSX.Element {
           <button className="login-form-submit w-full h-9 border-none bg-sec rounded-lg text-xl mb-4 cursor:pointer hover:bg-pri hover:text-text-pri hover:shadow-2xl hover:border-2 hover:border-pri " onClick={handleLoginUser}>Login</button>
 
           <p>Don't have an account
-            <span className="login-form-register text-purple-700 cursor-pointer m-5 hover:underline">Create one here...</span>
+            <span className="login-form-register text-purple-700 cursor-pointer m-5 hover:underline" onClick={props.toggleRegister}>Create one here...</span>
           </p>
           
         </div>

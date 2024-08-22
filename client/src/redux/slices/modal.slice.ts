@@ -21,7 +21,7 @@ export const ModalSlice = createSlice({
         ...state,
         displayLogin: action.payload,
       }
-      
+
       return state
     },
 
@@ -34,7 +34,7 @@ export const ModalSlice = createSlice({
       return state
     },
 
-    setDisplayLoad(state, action: PayloadAction<boolean>) {
+    setDisplayLoan(state, action: PayloadAction<boolean>) {
       state = {
         ...state,
         displayLoan: action.payload,
@@ -44,3 +44,7 @@ export const ModalSlice = createSlice({
     }
   }
 })
+
+export const { setDisplayLogin, setDisplayLibraryCard, setDisplayLoan } = ModalSlice.actions
+
+export default ModalSlice.reducer
