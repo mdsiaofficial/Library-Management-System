@@ -46,7 +46,7 @@ export default function LoginForm(props: ILoginFormProps): JSX.Element {
 
           <div className="login-form-input-group w-full mb-4">
             <label htmlFor="password">Password</label>
-            <input type="text" className="login-form-input w-full h-10 text-xl p-2 placeholder:text-text-sec focus:outline-none" name="password" placeholder="Password" ref={passwordRef} required />
+            <input type="password" className="login-form-input w-full h-10 text-xl p-2 placeholder:text-text-sec focus:outline-none" name="password" placeholder="Password" ref={passwordRef} required />
           </div>
 
           <button className="login-form-submit w-full h-9 border-none bg-sec rounded-lg text-xl mb-4 cursor:pointer hover:bg-pri hover:text-text-pri hover:shadow-2xl hover:border-2 hover:border-pri " onClick={handleLoginUser}>Login</button>

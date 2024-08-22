@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import LoginForm from '../features/authentication/components/LoginForm';
 import { RootState } from '../redux/ReduxStore';
+import { LoginRegisterModal } from '../features/authentication/index.components';
 
 export default function HomePage():JSX.Element {
 
@@ -9,7 +9,7 @@ export default function HomePage():JSX.Element {
     <div className=''>
       <div className="">Home page</div>
       {
-        displayLogin ? <LoginForm /> : <></>
+        displayLogin ? <LoginRegisterModal /> : <></>
       }
 
     </div>
