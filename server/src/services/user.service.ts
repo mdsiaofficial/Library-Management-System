@@ -3,7 +3,7 @@ import User from "../daos/user.dao";
 import { IUserModel } from "../daos/user.dao";
 import { IUser } from "../models/user.model";
 import bcrypt from "bcryptjs"
-import { InvalidUsernameOrPasswordError, UnableToSaveUserError } from "../utils/library.errors";
+import { InvalidUsernameOrPasswordError, UnableToSaveUserError, UserDoesNotExistError } from "../utils/library.errors";
 
 export async function register(user: IUser): Promise<IUserModel> {
   const rounds = ROUNDS
@@ -64,7 +64,8 @@ export async function findUserById(userId: string): Promise<IUserModel> {
   try {
     const user = await User.findById(userId)
     if (user) return user
-    throw new Error("User not found with this id.")
+    // throw new Error("User not found with this id.")
+    throw new UserDoesNotExistError("User not found with this id.")
 
   } catch (error: any) {
     throw new Error(error.message)
@@ -75,7 +76,8 @@ export async function modifyUser(user: IUserModel): Promise<IUserModel> {
   try {
     await User.findByIdAndUpdate(user?._id, user, { new: true })
     if (!user) {
-      throw new Error("User not found with this id.")
+      // throw new Error("User not found with this id.")
+      throw new UserDoesNotExistError("User not found with this id.")
     }
     return user
   } catch (error:any) {
@@ -86,8 +88,10 @@ export async function modifyUser(user: IUserModel): Promise<IUserModel> {
 export async function removeUser(userId: string): Promise<string> {
   try {
     const user = await User.findByIdAndDelete(userId)
+    if (!user) {
+      throw new UserDoesNotExistError("User not found with this id.")
+    }
     return "User deleted successfully"
-
   } catch (error: any) {
     throw new Error(error.message)
   }

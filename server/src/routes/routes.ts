@@ -10,6 +10,5 @@ export function registerRoutes(app: Express) {
       .json({ message: "Server is running..." })
   })
   app.use("/auth", authRouter)
-
   app.use("/users", userRouter)
 }

@@ -84,7 +84,8 @@ function findUserById(userId) {
             const user = yield user_dao_1.default.findById(userId);
             if (user)
                 return user;
-            throw new Error("User not found with this id.");
+            // throw new Error("User not found with this id.")
+            throw new library_errors_1.UserDoesNotExistError("User not found with this id.");
         }
         catch (error) {
             throw new Error(error.message);
@@ -96,7 +97,8 @@ function modifyUser(user) {
         try {
             yield user_dao_1.default.findByIdAndUpdate(user === null || user === void 0 ? void 0 : user._id, user, { new: true });
             if (!user) {
-                throw new Error("User not found with this id.");
+                // throw new Error("User not found with this id.")
+                throw new library_errors_1.UserDoesNotExistError("User not found with this id.");
             }
             return user;
         }
@@ -109,6 +111,9 @@ function removeUser(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const user = yield user_dao_1.default.findByIdAndDelete(userId);
+            if (!user) {
+                throw new library_errors_1.UserDoesNotExistError("User not found with this id.");
+            }
             return "User deleted successfully";
         }
         catch (error) {

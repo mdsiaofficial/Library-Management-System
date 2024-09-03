@@ -14,6 +14,7 @@ exports.getUserById = getUserById;
 exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
 const user_service_1 = require("../services/user.service");
+const library_errors_1 = require("../utils/library.errors");
 function getAllUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -33,6 +34,9 @@ function getUserById(req, res) {
             res.status(200).json({ message: "User retrieved successfully.", user });
         }
         catch (error) {
+            if (error instanceof library_errors_1.UserDoesNotExistError) {
+                res.status(404).json({ message: "User requested does not existed." });
+            }
             res.status(500).json({ message: "Could not find user", error: error.message });
         }
     });
@@ -47,6 +51,9 @@ function updateUser(req, res) {
             res.status(200).json({ message: "User updated successfully.", updatedUser });
         }
         catch (error) {
+            if (error instanceof library_errors_1.UserDoesNotExistError) {
+                res.status(404).json({ message: "User requested does not existed." });
+            }
             res.status(500).json({ message: "Unable to update user", error: error.message });
         }
     });
@@ -59,6 +66,9 @@ function deleteUser(req, res) {
             res.status(200).json({ message: "User removed successfully." });
         }
         catch (error) {
+            if (error instanceof library_errors_1.UserDoesNotExistError) {
+                res.status(404).json({ message: "User requested does not existed." });
+            }
             res.status(500).json({ message: "Unable to delete user", error: error.message });
         }
     });
