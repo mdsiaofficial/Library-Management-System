@@ -15,10 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Schemas = void 0;
 exports.validateSchema = validateSchema;
 const joi_1 = __importDefault(require("joi"));
-function validateSchema(schema) {
+function validateSchema(schema, property) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
-            yield schema.validateAsync(req.body);
+            // await schema.validateAsync(req.body)
+            switch (property) {
+                case 'query':
+                    yield schema.validateAsync(req.query);
+                    break;
+                case 'params':
+                    yield schema.validateAsync(req.params);
+                    break;
+                default:
+                    yield schema.validateAsync(req.body);
+            }
             next();
         }
         catch (error) {
@@ -39,6 +49,17 @@ exports.Schemas = {
         login: joi_1.default.object({
             email: joi_1.default.string().regex(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/).required(),
             password: joi_1.default.string().required()
+        }),
+        userId: joi_1.default.object({
+            userId: joi_1.default.string().regex(/^[0-9a-fA-F]{24}$/).required()
+        }),
+        update: joi_1.default.object({
+            _id: joi_1.default.string().regex(/^[0-9a-fA-F]{24}$/).required(),
+            type: joi_1.default.string().valid("ADMIN", "EMPLOYEE", "PATRON").required(),
+            firstName: joi_1.default.string().required(),
+            lastName: joi_1.default.string().required(),
+            email: joi_1.default.string().regex(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/).required(),
+            password: joi_1.default.string()
         })
     }
 };

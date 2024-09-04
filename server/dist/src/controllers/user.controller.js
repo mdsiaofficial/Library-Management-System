@@ -22,6 +22,9 @@ function getAllUsers(req, res) {
             res.status(200).json({ message: "Users retrieved successfully.", users });
         }
         catch (error) {
+            if (error instanceof library_errors_1.UserDoesNotExistError) {
+                res.status(404).json({ message: "User requested does not existed." });
+            }
             res.status(500).json({ message: "Could not find users", error: error.message });
         }
     });

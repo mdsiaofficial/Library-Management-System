@@ -1,2 +1,4 @@
 .anima
 node_modules
+dist
+server/dist

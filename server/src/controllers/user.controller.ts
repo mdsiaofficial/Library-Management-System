@@ -8,7 +8,10 @@ export async function getAllUsers(req:Request, res: Response) {
   try {
     const users = await findAllUser()
     res.status(200).json({message:"Users retrieved successfully.", users})
-  } catch (error:any) {
+  } catch (error: any) {
+    if (error instanceof UserDoesNotExistError) {
+      res.status(404).json({message: "User requested does not existed."})
+    }
     res.status(500).json({message:"Could not find users", error:error.message})
   }
 }
